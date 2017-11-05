@@ -69,4 +69,13 @@ describe('REST client tests', function () {
       assert.equal(error.message, `id for 'patch' can not be undefined, only 'null' when updating multiple entries`);
     });
   });
+
+  it('replace url params', () => {
+    const app = feathers().configure(rest('http://localhost:8889').fetch(fetch));
+    const service = app.service('todos/:todoId/items/:itemId/subitems');
+
+    return service.get(1, { todoId: 1, itemId: 2 }).catch(err => {
+      assert.equal(err.message, 'request to http://localhost:8889/todos/1/items/2/subitems/1 failed, reason: connect ECONNREFUSED 127.0.0.1:8889');
+    });
+  });
 });
